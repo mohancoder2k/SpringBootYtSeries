@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sort Elements</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.8;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        input {
+            font-size: 1.2em;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        p {
+            font-size: 1.4em;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        async function sortElements() {
+            const input = document.getElementById("elements").value;
+            const elements = input.split(",").map(item => item.trim());
+            
+            const response = await fetch("http://localhost:8081/api/asc", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(elements)
+            });
+  const sortedElements = await response.json();
+          
+            document.getElementById("result").innerText = `Sorted: ${sortedElements.join(", ")}`;
+        }
+
+        async function sortElementsDesc() {
+            const input = document.getElementById("elements").value;
+            const elements = input.split(",").map(item => item.trim());
+
+            const response = await fetch("http://localhost:8081/api/desc", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(elements)
+            });
+
+            const sortedElements = await response.json();
+            document.getElementById("result").innerText = `Sorted (Descending): ${sortedElements.join(", ")}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Sort Elements</h1>
+    <input type="text" id="elements" placeholder="Enter comma-separated elements"><br>
+    <button onclick="sortElements()">Sort Ascending</button><br>
+    <button onclick="sortElementsDesc()">Sort Descending</button><br>
+    <p id="result"></p>
+</body>
+</html>
